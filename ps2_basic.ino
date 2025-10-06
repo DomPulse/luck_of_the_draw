@@ -6,19 +6,21 @@ byte b = B00001000;
 bool ps2Read[11];
 uint8_t data_byte = 0;
 bool ready = false;
+bool shifted = false;
 
 void setup() 
 {
   pinMode (ledPin, OUTPUT);
   pinMode (2 , INPUT);
   pinMode (3 , INPUT);
+  pinMode(13, OUTPUT);
   attachInterrupt (digitalPinToInterrupt (2), incr, FALLING) ;
   Serial.begin(9600);
 }
 
 void loop ( ) 
 {
-
+  digitalWrite(13, shifted);
   
   /*
   if (ps2Read[0] == 0 & ps2Read[9] == 1)
@@ -42,32 +44,102 @@ void loop ( )
 
 void convert_char(int data)
 {
-  if (data == 56) Serial.println("A");
-  else if (data == 76) Serial.println("B");
-  else if (data == 132) Serial.println("C");
-  else if (data == 196) Serial.println("D");
-  else if (data == 36) Serial.println("E");
-  else if (data == 212) Serial.println("F");
-  else if (data == 44) Serial.println("G");
-  else if (data == 204) Serial.println("H");
-  else if (data == 194) Serial.println("I");
-  else if (data == 220) Serial.println("J");
-  else if (data == 66) Serial.println("K");
-  else if (data == 210) Serial.println("L");
-  else if (data == 92) Serial.println("M");
-  else if (data == 140) Serial.println("N");
-  else if (data == 34) Serial.println("O");
-  else if (data == 178) Serial.println("P");
-  else if (data == 168) Serial.println("Q");
-  else if (data == 180) Serial.println("R");
-  else if (data == 216) Serial.println("S");
-  else if (data == 52) Serial.println("T");
-  else if (data == 60) Serial.println("U");
-  else if (data == 84) Serial.println("V");
-  else if (data == 184) Serial.println("W");
-  else if (data == 68) Serial.println("X");
-  else if (data == 172) Serial.println("Y");
-  else if (data == 88) Serial.println("Z"); 
+  if (shifted)
+  {
+    if (data == 56) Serial.println("A");
+    else if (data == 76) Serial.println("B");
+    else if (data == 132) Serial.println("C");
+    else if (data == 196) Serial.println("D");
+    else if (data == 36) Serial.println("E");
+    else if (data == 212) Serial.println("F");
+    else if (data == 44) Serial.println("G");
+    else if (data == 204) Serial.println("H");
+    else if (data == 194) Serial.println("I");
+    else if (data == 220) Serial.println("J");
+    else if (data == 66) Serial.println("K");
+    else if (data == 210) Serial.println("L");
+    else if (data == 92) Serial.println("M");
+    else if (data == 140) Serial.println("N");
+    else if (data == 34) Serial.println("O");
+    else if (data == 178) Serial.println("P");
+    else if (data == 168) Serial.println("Q");
+    else if (data == 180) Serial.println("R");
+    else if (data == 216) Serial.println("S");
+    else if (data == 52) Serial.println("T");
+    else if (data == 60) Serial.println("U");
+    else if (data == 84) Serial.println("V");
+    else if (data == 184) Serial.println("W");
+    else if (data == 68) Serial.println("X");
+    else if (data == 172) Serial.println("Y");
+    else if (data == 88) Serial.println("Z"); 
+    else if (data == 148) Serial.println(" "); 
+    else if (data == 104) Serial.println("!");
+    else if (data == 120) Serial.println("@");
+    else if (data == 100) Serial.println("#");
+    else if (data == 164) Serial.println("$");
+    else if (data == 116) Serial.println("%"); 
+    else if (data == 108) Serial.println("^");
+    else if (data == 188) Serial.println("&");
+    else if (data == 124) Serial.println("*");
+    else if (data == 98) Serial.println("("); 
+    else if (data == 162) Serial.println(")"); 
+    else if (data == 130) Serial.println("<"); 
+    else if (data == 146) Serial.println(">"); 
+    else if (data == 82) Serial.println("?"); 
+    else if (data == 74) Serial.println('"'); 
+    else Serial.println(data); 
+  }
+  
+  else
+  {
+    if (data == 56) Serial.println("a");
+    else if (data == 76) Serial.println("b");
+    else if (data == 132) Serial.println("c");
+    else if (data == 196) Serial.println("d");
+    else if (data == 36) Serial.println("e");
+    else if (data == 212) Serial.println("f");
+    else if (data == 44) Serial.println("g");
+    else if (data == 204) Serial.println("h");
+    else if (data == 194) Serial.println("i");
+    else if (data == 220) Serial.println("j");
+    else if (data == 66) Serial.println("k");
+    else if (data == 210) Serial.println("l");
+    else if (data == 92) Serial.println("m");
+    else if (data == 140) Serial.println("n");
+    else if (data == 34) Serial.println("o");
+    else if (data == 178) Serial.println("p");
+    else if (data == 168) Serial.println("q");
+    else if (data == 180) Serial.println("r");
+    else if (data == 216) Serial.println("s");
+    else if (data == 52) Serial.println("t");
+    else if (data == 60) Serial.println("u");
+    else if (data == 84) Serial.println("v");
+    else if (data == 184) Serial.println("w");
+    else if (data == 68) Serial.println("x");
+    else if (data == 172) Serial.println("y");
+    else if (data == 88) Serial.println("z"); 
+    else if (data == 148) Serial.println(" "); 
+    else if (data == 104) Serial.println("1");
+    else if (data == 120) Serial.println("2");
+    else if (data == 100) Serial.println("3");
+    else if (data == 164) Serial.println("4");
+    else if (data == 116) Serial.println("5"); 
+    else if (data == 108) Serial.println("6");
+    else if (data == 188) Serial.println("7");
+    else if (data == 124) Serial.println("8");
+    else if (data == 98) Serial.println("9"); 
+    else if (data == 162) Serial.println("0"); 
+    else if (data == 130) Serial.println(","); 
+    else if (data == 146) Serial.println("."); 
+    else if (data == 82) Serial.println("/"); 
+    else if (data == 74) Serial.println("'"); 
+    else Serial.println(data); 
+  }
+  //90 -> enter
+  //102 -> backspace
+  //153 -> right shift
+  //72 -> left shift
+
   ready = false;
 }
 
@@ -93,6 +165,11 @@ void incr()
     if (ps2Read[0] == 0 & ps2Read[10] == 1)
     {
       //Serial.println(data_byte); 
+      if (data_byte == 72 | data_byte == 154)
+      {
+        shifted = !ready;
+      }
+
       if (ready)
       {
         convert_char(data_byte);
@@ -102,6 +179,8 @@ void incr()
       {
         ready = true;
       }
+
+
       
       attachInterrupt(digitalPinToInterrupt (2), incr, FALLING) ;
     }
