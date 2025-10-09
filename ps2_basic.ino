@@ -47,9 +47,7 @@ void convert_char(int data)
 {
   if (shifted)
   {
-    buf[2] = 57;
-    Serial.write(buf, 8); 
-    releaseKey();
+    buf[0] = 2;
 
     if (data == 56) buf[2] = 4;
     else if (data == 76) buf[2] = 5;
@@ -95,10 +93,6 @@ void convert_char(int data)
     else if (data == 102) buf[2] = 42;
     else if (data == 90) buf[2] = 40;
 
-    Serial.write(buf, 8); 
-    releaseKey();
-
-    buf[2] = 57;
     Serial.write(buf, 8); 
     releaseKey();
   }
