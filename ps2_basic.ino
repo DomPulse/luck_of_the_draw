@@ -3,6 +3,7 @@ const byte interruptPin = 2;
 volatile byte state = LOW;
 int gaming = 0;
 byte b = B00001000;
+uint8_t buf[8] = { 0 };   //Keyboard report buffer
 bool ps2Read[11];
 uint8_t data_byte = 0;
 bool ready = false;
@@ -46,98 +47,110 @@ void convert_char(int data)
 {
   if (shifted)
   {
-    if (data == 56) Serial.write("A");
-    else if (data == 76) Serial.write("B");
-    else if (data == 132) Serial.write("C");
-    else if (data == 196) Serial.write("D");
-    else if (data == 36) Serial.write("E");
-    else if (data == 212) Serial.write("F");
-    else if (data == 44) Serial.write("G");
-    else if (data == 204) Serial.write("H");
-    else if (data == 194) Serial.write("I");
-    else if (data == 220) Serial.write("J");
-    else if (data == 66) Serial.write("K");
-    else if (data == 210) Serial.write("L");
-    else if (data == 92) Serial.write("M");
-    else if (data == 140) Serial.write("N");
-    else if (data == 34) Serial.write("O");
-    else if (data == 178) Serial.write("P");
-    else if (data == 168) Serial.write("Q");
-    else if (data == 180) Serial.write("R");
-    else if (data == 216) Serial.write("S");
-    else if (data == 52) Serial.write("T");
-    else if (data == 60) Serial.write("U");
-    else if (data == 84) Serial.write("V");
-    else if (data == 184) Serial.write("W");
-    else if (data == 68) Serial.write("X");
-    else if (data == 172) Serial.write("Y");
-    else if (data == 88) Serial.write("Z"); 
-    else if (data == 148) Serial.write(" "); 
-    else if (data == 104) Serial.write("!");
-    else if (data == 120) Serial.write("@");
-    else if (data == 100) Serial.write("#");
-    else if (data == 164) Serial.write("$");
-    else if (data == 116) Serial.write("%"); 
-    else if (data == 108) Serial.write("^");
-    else if (data == 188) Serial.write("&");
-    else if (data == 124) Serial.write("*");
-    else if (data == 98) Serial.write("("); 
-    else if (data == 162) Serial.write(")"); 
-    else if (data == 130) Serial.write("<"); 
-    else if (data == 146) Serial.write(">"); 
-    else if (data == 82) Serial.write("?"); 
-    else if (data == 74) Serial.write('"'); 
-    else if (data == 102) Serial.write(0xC);
-    else if (data == 90) Serial.write("\n");
-    else Serial.println(data); 
+    buf[2] = 57;
+    Serial.write(buf, 8); 
+    releaseKey();
+
+    if (data == 56) buf[2] = 4;
+    else if (data == 76) buf[2] = 5;
+    else if (data == 132) buf[2] = 6;
+    else if (data == 196) buf[2] = 7;
+    else if (data == 36) buf[2] = 8;
+    else if (data == 212) buf[2] = 9;
+    else if (data == 44) buf[2] = 10;
+    else if (data == 204) buf[2] = 11;
+    else if (data == 194) buf[2] = 12;
+    else if (data == 220) buf[2] = 13;
+    else if (data == 66) buf[2] = 14;
+    else if (data == 210) buf[2] = 15;
+    else if (data == 92) buf[2] = 16;
+    else if (data == 140) buf[2] = 17;
+    else if (data == 34) buf[2] = 18;
+    else if (data == 178) buf[2] = 19;
+    else if (data == 168) buf[2] = 20;
+    else if (data == 180) buf[2] = 21;
+    else if (data == 216) buf[2] = 22;
+    else if (data == 52) buf[2] = 23;
+    else if (data == 60) buf[2] = 24;
+    else if (data == 84) buf[2] = 25;
+    else if (data == 184) buf[2] = 26;
+    else if (data == 68) buf[2] = 27;
+    else if (data == 172) buf[2] = 28;
+    else if (data == 88) buf[2] = 29;
+    else if (data == 148) buf[2] = 44;
+    else if (data == 104) buf[2] = 30;
+    else if (data == 120) buf[2] = 31;
+    else if (data == 100) buf[2] = 32;
+    else if (data == 164) buf[2] = 33;
+    else if (data == 116) buf[2] = 34;
+    else if (data == 108) buf[2] = 35;
+    else if (data == 188) buf[2] = 36;
+    else if (data == 124) buf[2] = 37;
+    else if (data == 98) buf[2] = 38;
+    else if (data == 162) buf[2] = 39;
+    else if (data == 130) buf[2] = 54;
+    else if (data == 146) buf[2] = 55;
+    else if (data == 82) buf[2] = 56;
+    else if (data == 74) buf[2] = 52;
+    else if (data == 102) buf[2] = 42;
+    else if (data == 90) buf[2] = 40;
+
+    Serial.write(buf, 8); 
+    releaseKey();
+
+    buf[2] = 57;
+    Serial.write(buf, 8); 
+    releaseKey();
   }
   
   else
   {
-    if (data == 56) Serial.write("a");
-    else if (data == 76) Serial.write("b");
-    else if (data == 132) Serial.write("c");
-    else if (data == 196) Serial.write("d");
-    else if (data == 36) Serial.write("e");
-    else if (data == 212) Serial.write("f");
-    else if (data == 44) Serial.write("g");
-    else if (data == 204) Serial.write("h");
-    else if (data == 194) Serial.write("i");
-    else if (data == 220) Serial.write("j");
-    else if (data == 66) Serial.write("k");
-    else if (data == 210) Serial.write("l");
-    else if (data == 92) Serial.write("m");
-    else if (data == 140) Serial.write("n");
-    else if (data == 34) Serial.write("o");
-    else if (data == 178) Serial.write("p");
-    else if (data == 168) Serial.write("q");
-    else if (data == 180) Serial.write("r");
-    else if (data == 216) Serial.write("s");
-    else if (data == 52) Serial.write("t");
-    else if (data == 60) Serial.write("u");
-    else if (data == 84) Serial.write("v");
-    else if (data == 184) Serial.write("w");
-    else if (data == 68) Serial.write("x");
-    else if (data == 172) Serial.write("y");
-    else if (data == 88) Serial.write("z"); 
-    else if (data == 148) Serial.write(" "); 
-    else if (data == 104) Serial.write("1");
-    else if (data == 120) Serial.write("2");
-    else if (data == 100) Serial.write("3");
-    else if (data == 164) Serial.write("4");
-    else if (data == 116) Serial.write("5"); 
-    else if (data == 108) Serial.write("6");
-    else if (data == 188) Serial.write("7");
-    else if (data == 124) Serial.write("8");
-    else if (data == 98) Serial.write("9"); 
-    else if (data == 162) Serial.write("0"); 
-    else if (data == 130) Serial.write(","); 
-    else if (data == 146) Serial.write("."); 
-    else if (data == 82) Serial.write("/"); 
-    else if (data == 74) Serial.write("'");
-    else if (data == 102) Serial.write(0xC);
-    else if (data == 90) Serial.write("\n");
-    else Serial.println(data); 
+    if (data == 56) buf[2] = 4;
+    else if (data == 76) buf[2] = 5;
+    else if (data == 132) buf[2] = 6;
+    else if (data == 196) buf[2] = 7;
+    else if (data == 36) buf[2] = 8;
+    else if (data == 212) buf[2] = 9;
+    else if (data == 44) buf[2] = 10;
+    else if (data == 204) buf[2] = 11;
+    else if (data == 194) buf[2] = 12;
+    else if (data == 220) buf[2] = 13;
+    else if (data == 66) buf[2] = 14;
+    else if (data == 210) buf[2] = 15;
+    else if (data == 92) buf[2] = 16;
+    else if (data == 140) buf[2] = 17;
+    else if (data == 34) buf[2] = 18;
+    else if (data == 178) buf[2] = 19;
+    else if (data == 168) buf[2] = 20;
+    else if (data == 180) buf[2] = 21;
+    else if (data == 216) buf[2] = 22;
+    else if (data == 52) buf[2] = 23;
+    else if (data == 60) buf[2] = 24;
+    else if (data == 84) buf[2] = 25;
+    else if (data == 184) buf[2] = 26;
+    else if (data == 68) buf[2] = 27;
+    else if (data == 172) buf[2] = 28;
+    else if (data == 88) buf[2] = 29;
+    else if (data == 148) buf[2] = 44;
+    else if (data == 104) buf[2] = 30;
+    else if (data == 120) buf[2] = 31;
+    else if (data == 100) buf[2] = 32;
+    else if (data == 164) buf[2] = 33;
+    else if (data == 116) buf[2] = 34;
+    else if (data == 108) buf[2] = 35;
+    else if (data == 188) buf[2] = 36;
+    else if (data == 124) buf[2] = 37;
+    else if (data == 98) buf[2] = 38;
+    else if (data == 162) buf[2] = 39;
+    else if (data == 130) buf[2] = 54;
+    else if (data == 146) buf[2] = 55;
+    else if (data == 82) buf[2] = 56;
+    else if (data == 74) buf[2] = 52;
+    else if (data == 102) buf[2] = 42;
+    else if (data == 90) buf[2] = 40;
+
+    Serial.write(buf, 8); 
+    releaseKey();
   }
   //90 -> enter
   //102 -> backspace
@@ -194,4 +207,11 @@ void incr()
     }
     
   }
+}
+
+void releaseKey() 
+{
+  buf[0] = 0;
+  buf[2] = 0;
+  Serial.write(buf, 8); // Send Release key  
 }
