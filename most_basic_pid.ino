@@ -10,8 +10,8 @@ float current_degree = 0.0;
 int net_steps = 0; 
 
 float p_coef = 10.0;
-float i_coef = 0.02;
-float d_coef = 0.2;
+float i_coef = 0.1;
+float d_coef = 0.0;
 
 float p_error = 0.0;
 float i_error = 0.0;
@@ -25,6 +25,8 @@ float intensity = 0.0;
 float alpha = 0.00001; //avoids div by 0?
 float dwell_time = 1000.0;
 long millis_last_move = 0;
+
+float epsilon = 1;
 
 void setup() 
 {
@@ -47,19 +49,25 @@ void loop()
   }
 
   calc_pid();
-  dwell_time = 1.0/intensity;
+  
 
   //Serial.print(current_degree);
   //Serial.print(" ");
-  //Serial.println(goal_degree);
+  //Serial.println(intensity);
 
-  if (millis() - millis_last_move > 100*abs(dwell_time))
+  //actually so dumb
+  if (abs(intensity) > epsilon)
   {
-    millis_last_move = millis();
-    digitalWrite(DIR_PIN, dwell_time > 0);
-    digitalWrite(STEP_PIN, !digitalRead(STEP_PIN));
-    current_degree += (1 - 2*(dwell_time < 0))/steps_p_degree;
+    dwell_time = 1.0/intensity;
+    if (micros() - millis_last_move > abs(dwell_time))
+    {
+      millis_last_move = micros();
+      digitalWrite(DIR_PIN, dwell_time > 0);
+      digitalWrite(STEP_PIN, !digitalRead(STEP_PIN));
+      current_degree += (1 - 2*(dwell_time < 0))/steps_p_degree;
+    }
   }
+  
 
 }
 
@@ -80,5 +88,5 @@ void calc_pid()
     i_error = min_i;
   }
 
-  intensity = p_coef*p_error + i_coef*i_error + d_coef*d_error + alpha;
+  intensity = p_coef*p_error + i_coef*i_error + d_coef*d_error;
 }
