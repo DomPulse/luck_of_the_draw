@@ -2,8 +2,8 @@ char step_pin_mask = 0x01;
 char dir_pin_mask = 0x02;
 signed int net_steps = 0;
 signed int goal_steps = 0;
-char step_timer_preset = 0xfe;
-int error_timer_preset = 0xff00;
+char step_timer_preset = 0xf0;
+int error_timer_preset = 0xffd0;
 signed int error = 0;
 
 void setup() {
@@ -28,16 +28,20 @@ void setup() {
 ISR(TIMER0_COMPA_vect) //for some reasone TIMER0_OVF_vect did not work here
 {
 
-  PORTB = PORTB^step_pin_mask; //bitwise or to toggle selected pins
-  TCNT0 = step_timer_preset;
-  net_steps += 1 - (PORTB&dir_pin_mask); //really convenitenly, dir_pin_mask being 2 means that if it the direction pin is high we do -1 + 2 = +1 giving the desired change to net steps :)
+  if (abs(error) > 4);
+  {
+    PORTB = PORTB^step_pin_mask; //bitwise or to toggle selected pins
+    //TCNT0 = step_timer_preset;
+    net_steps += 1 - (PORTB&dir_pin_mask); //really convenitenly, dir_pin_mask being 2 means that if it the direction pin is high we do -1 + 2 = +1 giving the desired change to net steps :)
+  }
+  
   
 }
 
 ISR(TIMER1_COMPA_vect)
 {
   error = goal_steps - net_steps;
-
+  TCNT0 = error>>4;
   if (error < 0)
   {
     PORTB = PORTB|dir_pin_mask;
